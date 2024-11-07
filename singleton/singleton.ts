@@ -1,54 +1,53 @@
 /**
- * Patrón de diseño Singleton - Creacional
+ * The Singleton class defines an `instance` getter, that lets clients access
+ * the unique singleton instance.
  */
 class Singleton {
-  /**
-   * Propiedades estáticas que almacenan la instancia de la clase Singleton
-   */
-  private static instance: Singleton;
+  static #instance: Singleton;
 
   /**
-   * Propiedad que almacena el número aleatorio para validar la instancia
+   * The Singleton's constructor should always be private to prevent direct
+   * construction calls with the `new` operator.
    */
-  private random: number;
+  private constructor() {}
 
   /**
-   * Constructor privado para evitar la creación de instancias de la clase Singleton
+   * The static getter that controls access to the singleton instance.
+   *
+   * This implementation allows you to extend the Singleton class while
+   * keeping just one instance of each subclass around.
    */
-  private constructor() {
-    this.random = Math.random();
-  }
-
-  /**
-   * Método que devuelve la instancia de la clase Singleton
-   * Este método sería el "constructor" de la clase Singleton
-   */
-  public static getInstance(): Singleton {
-    if (!Singleton.instance) {
-      Singleton.instance = new Singleton();
+  public static get instance(): Singleton {
+    if (!Singleton.#instance) {
+      Singleton.#instance = new Singleton();
     }
-    return Singleton.instance;
+
+    return Singleton.#instance;
   }
 
   /**
-   * Método para obtener el número aleatorio
+   * Finally, any singleton can define some business logic, which can be
+   * executed on its instance.
    */
-  public getRandom(): number {
-    return this.random;
+  public someBusinessLogic() {
+    // ...
   }
 }
 
-/*
- * Uso del patrón Singleton
+/**
+ * The client code.
  */
-const singleton1 = Singleton.getInstance();
-const singleton2 = Singleton.getInstance();
+function clientCode() {
+  const s1 = Singleton.instance;
+  const s2 = Singleton.instance;
 
-console.log("Número aleatorio en singleton1:", singleton1.getRandom());
-console.log("Número aleatorio en singleton2:", singleton2.getRandom());
-
-if (singleton1 === singleton2) {
-  console.log("Las instancias son iguales");
-} else {
-  console.log("Las instancias son diferentes");
+  if (s1 === s2) {
+    console.log(
+      "Singleton works, both variables contain the same instance.",
+    );
+  } else {
+    console.log("Singleton failed, variables contain different instances.");
+  }
 }
+
+clientCode();
